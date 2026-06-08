@@ -36,13 +36,26 @@ function Signup() {
     e.preventDefault();
 
     try {
-      await signupUser(formData);
+      const data = await signupUser(
+  formData
+);
 
-      alert(
-        "Account created successfully"
-      );
+localStorage.setItem(
+  "token",
+  data.token
+);
 
-      navigate("/");
+localStorage.setItem(
+  "username",
+  data.username
+);
+
+localStorage.setItem(
+  "userId",
+  data.userId
+);
+
+navigate("/chat");
     } catch (error) {
       alert(
         error.response?.data?.message ||

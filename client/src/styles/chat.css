@@ -171,6 +171,8 @@
   border-radius: 14px;
   max-width: 60%;
   word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
 }
 
 .sent {

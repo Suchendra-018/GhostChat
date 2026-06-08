@@ -271,18 +271,35 @@ const handleLogout = () => {
         <div className="messages-container">
           
           {messages.map((message) => (
-            <div
-              key={message._id}
-              className={
-                message.sender === currentUserId
-                  ? "message sent"
-                  : "message received"
-              }
-            >
-              {message.content}
-              <div ref={messagesEndRef}></div>
-            </div>
-          ))}
+  <div
+    key={message._id}
+    className={
+      message.sender === currentUserId
+        ? "message sent"
+        : "message received"
+    }
+  >
+    <div>
+      {message.content}
+    </div>
+
+    <small
+      style={{
+        display: "block",
+        marginTop: "5px",
+        fontSize: "11px",
+        opacity: "0.7",
+      }}
+    >
+      {new Date(
+        message.createdAt
+      ).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}
+    </small>
+  </div>
+))}
         </div>
 
       </>
