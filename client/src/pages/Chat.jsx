@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 function Chat() {
   const currentUserId =
   localStorage.getItem("userId");
+  console.log("Current User ID:", currentUserId);
 
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
@@ -38,14 +39,18 @@ function Chat() {
 }, [messages]);
 
 useEffect(() => {
-  socket.on("connect", () => {
-    console.log("Connected:", socket.id);
-  });
+  if (!currentUserId) return;
 
-  return () => {
-    socket.off("connect");
-  };
-}, []);
+  socket.emit(
+    "join_room",
+    currentUserId
+  );
+
+  console.log(
+    "Joined room:",
+    currentUserId
+  );
+},[currentUserId]);
 
 useEffect(() => {
   socket.on("receive_message", (data) => {
@@ -94,18 +99,20 @@ useEffect(() => {
   }
 };
 const handleSendMessage = async () => {
-  if (!selectedUser) return;
+  const content = newMessage.trim();
+
+  if (!selectedUser || !content) return;
 
   try {
     await sendMessage({
       sender: currentUserId,
       receiver: selectedUser._id,
-      content: newMessage,
+      content,
     });
     socket.emit("send_message", {
   sender: currentUserId,
   receiver: selectedUser._id,
-  content: newMessage,
+  content,
 });
 
     const data = await getConversation(
